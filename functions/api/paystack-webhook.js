@@ -15,7 +15,7 @@
 //   - In Paystack: Settings → API Keys & Webhooks → Webhook URL →
 //       https://YOURSITE.pages.dev/api/paystack-webhook
 
-const SITE_URL = "https://YOURSITE.pages.dev"; // <-- replace after your first deploy
+const SITE_URL = "https://puntercheatsheet.nmangaawor.workers.dev"; // <-- replace after your first deploy
 
 const PRODUCT_FILES = [
   { label: "Steady Winning Cheat Sheet (PDF)", path: "/files/Steady-Winning-Cheat-Sheet.pdf" },
