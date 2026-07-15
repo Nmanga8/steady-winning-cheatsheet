@@ -332,6 +332,16 @@
     h1{ max-width:none; }
     #buy-toast{ left:12px; right:12px; max-width:none; }
   }
+
+  
+  .dl-list{ display:flex; flex-direction:column; gap:10px; margin-top:4px; }
+.dl-row{
+  display:flex; justify-content:space-between; align-items:center; text-decoration:none; color:var(--ink);
+  background:#fff; border:1px solid rgba(22,33,28,0.12); border-radius:10px; padding:12px 14px; font-size:13px; font-weight:600;
+}
+.dl-row span:last-child{ color:var(--pitch-dim); font-family:'IBM Plex Mono'; font-size:11px; font-weight:700; }
+.support-note{ margin-top:14px; font-size:11.5px; color:#5b6a62; text-align:center; }
+.support-note a{ color:var(--pitch-dim); font-weight:700; text-decoration:underline; }
 </style>
 </head>
 <body>
@@ -614,11 +624,12 @@
 <footer>
   <div class="wrap">
     <p class="disclaimer">18+. Bet only what you can afford to lose.</p>
-    <div class="foot-links">SPORTYBET PUNTER'S SECRET CHEATSHEET · WORLD CUP 2026 EDITION</div>
+    <!-- <div class="foot-links">SPORTYBET PUNTER'S SECRET CHEATSHEET · WORLD CUP 2026 EDITION</div> -->
+    <div class="foot-links">SPORTYBET PUNTER'S SECRET CHEATSHEET <a href="mailto:bossbenny209@gmail.com" style="color:inherit; text-decoration:underline;">Support: bossbenny209@gmail.com</a></div>
   </div>
 </footer>
 
-<div id="checkout-overlay">
+<!-- <div id="checkout-overlay">
   <div class="checkout-modal">
     <button class="checkout-close" onclick="closeCheckout()">✕</button>
     <h3>Stop guessing. Start betting with a system.</h3>
@@ -629,6 +640,41 @@
     <input id="checkout-email" type="email" placeholder="you@email.com" autocomplete="email">
     <div class="cm-error" id="checkout-error">Please enter a valid email address.</div>
     <button class="btn-primary" style="width:100%;" onclick="submitCheckout()">Pay ₦15,000 →</button>
+  </div>
+</div> -->
+
+<div id="checkout-overlay">
+  <div class="checkout-modal" id="checkout-form-state">
+    <button class="checkout-close" onclick="closeCheckout()">✕</button>
+    <h3>Stop guessing. Start betting with a system.</h3>
+    <div class="cm-sub">6 modules + Pre Bet Checklist + Staking calculator + Bet Tracker & Bet log template</div>
+    <div class="cm-price-row"><span>Total due today</span><b>₦15,000</b></div>
+    <label for="checkout-email">Where do I send your cheatsheet?</label>
+    <input id="checkout-name" type="text" placeholder="John Doe">
+    <input id="checkout-email" type="email" placeholder="you@email.com" autocomplete="email">
+    <div class="cm-error" id="checkout-error">Please enter a valid email address.</div>
+    <button class="btn-primary" style="width:100%;" onclick="submitCheckout()">Pay ₦15,000 →</button>
+  </div>
+
+  <div class="checkout-modal" id="checkout-success-state" style="display:none;">
+    <button class="checkout-close" onclick="closeCheckout()">✕</button>
+    <h3>Payment received 🎉</h3>
+    <div class="cm-sub" id="success-sub">Your files are ready below.</div>
+    <div class="dl-list">
+      <a class="dl-row" href="files/Steady-Winning-Cheat-Sheet.pdf" download>
+        <span>📘 Steady Winning Cheat Sheet (PDF)</span><span>Download</span>
+      </a>
+      <a class="dl-row" href="files/Steady-Winning-Bet-Tracker.xlsx" download>
+        <span>📊 Editable Bet Tracker</span><span>Download</span>
+      </a>
+      <a class="dl-row" href="files/Steady-Winning-Pre-Bet-Checklist.pdf" download>
+        <span>✅ Printable Pre-Bet Checklist</span><span>Download</span>
+      </a>
+      <!-- <a class="dl-row" href="files/Steady-Winning-Checklist-Wallpaper.png" download>
+        <span>📱 Checklist Phone Wallpaper (PNG)</span><span>Download</span>
+      </a> -->
+    </div>
+    <div class="support-note">Didn't get your files, or have a question? Email <a href="mailto:bossbenny209@gmail.com">bossbenny209@gmail.com</a> and I'll sort it out.</div>
   </div>
 </div>
 
@@ -645,7 +691,9 @@
   const PAYSTACK_PUBLIC_KEY = "pk_live_88b257cdbd24d46f972c8b7c8ce9304f6c046c04";
   const PRICE_NAIRA = 15000;
 
-  function openCheckout(){
+function openCheckout(){
+    document.getElementById('checkout-form-state').style.display = 'block';
+    document.getElementById('checkout-success-state').style.display = 'none';
     document.getElementById('checkout-overlay').classList.add('show');
     document.getElementById('checkout-email').focus();
   }
@@ -681,9 +729,11 @@
       metadata: {
         product: "Steady Winning Cheat Sheet — World Cup 2026 Edition"
       },
-      callback: function(response){
-        closeCheckout();
-        alert("Payment received! Reference: " + response.reference + "\n\nYour download link is on the way to " + email + ". (Site owner: connect this callback to your email/delivery system to send the PDF automatically.)");
+     callback: function(response){
+        document.getElementById('checkout-form-state').style.display = 'none';
+        document.getElementById('checkout-success-state').style.display = 'block';
+        document.getElementById('success-sub').textContent =
+          "Reference " + response.reference + " — your files are ready below.";
       },
       onClose: function(){
         // user closed the popup without paying
